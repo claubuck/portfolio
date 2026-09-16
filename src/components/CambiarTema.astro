@@ -1,0 +1,27 @@
+---
+import Icono from './Icono.astro';
+---
+
+<button
+  id="btn-tema"
+  type="button"
+  class="grid h-9 w-9 place-items-center rounded-lg border border-line text-muted transition-colors hover:border-accent hover:text-accent"
+  aria-label="Cambiar entre tema claro y oscuro"
+>
+  <Icono nombre="sol" class="hidden h-[18px] w-[18px] dark:block" />
+  <Icono nombre="luna" class="block h-[18px] w-[18px] dark:hidden" />
+</button>
+
+<script>
+  const boton = document.getElementById('btn-tema');
+  boton?.addEventListener('click', () => {
+    const raiz = document.documentElement;
+    const nuevo = raiz.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    raiz.setAttribute('data-theme', nuevo);
+    try {
+      localStorage.setItem('tema', nuevo);
+    } catch {
+      /* si localStorage está bloqueado, el tema dura solo esta visita */
+    }
+  });
+</script>

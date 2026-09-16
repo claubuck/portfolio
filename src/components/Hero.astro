@@ -1,0 +1,96 @@
+---
+import { perfil } from '../data/perfil';
+import { ruta } from '../utils/ruta';
+import Icono from './Icono.astro';
+
+const redes = [
+  { nombre: 'linkedin', url: perfil.redes.linkedin, etiqueta: 'LinkedIn' },
+  { nombre: 'github', url: perfil.redes.github, etiqueta: 'GitHub' },
+  {
+    nombre: 'whatsapp',
+    url: perfil.whatsapp ? `https://wa.me/${perfil.whatsapp}` : '',
+    etiqueta: 'WhatsApp',
+  },
+].filter((r) => r.url);
+---
+
+<section id="inicio" class="relative overflow-hidden border-b border-line">
+  <!-- Resplandor decorativo detrás del texto -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[46rem] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl"
+  >
+  </div>
+
+  <div class="relative mx-auto max-w-5xl px-5 py-20 sm:py-28">
+    <p
+      class="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-medium text-muted"
+    >
+      <span class="relative flex h-2 w-2">
+        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70"></span>
+        <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+      </span>
+      Disponible para nuevos proyectos
+    </p>
+
+    <h1 class="max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
+      {perfil.nombre}
+    </h1>
+
+    <p class="mt-3 text-lg font-semibold text-accent-text sm:text-xl">
+      {perfil.rol}
+    </p>
+
+    <p class="mt-2 font-mono text-sm text-muted">
+      {perfil.especialidades}
+    </p>
+
+    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
+      {perfil.titular}
+    </p>
+
+    <div class="mt-9 flex flex-wrap items-center gap-3">
+      <a
+        href="#proyectos"
+        class="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+      >
+        Ver proyectos
+        <Icono nombre="flecha" class="h-4 w-4" />
+      </a>
+
+      {
+        perfil.cv && (
+          <a
+            href={ruta(perfil.cv)}
+            download
+            class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-5 py-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+          >
+            <Icono nombre="descargar" class="h-4 w-4" />
+            Descargar CV
+          </a>
+        )
+      }
+
+      <div class="flex items-center gap-1">
+        {
+          redes.map((red) => (
+            <a
+              href={red.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={red.etiqueta}
+              class="grid h-11 w-11 place-items-center rounded-lg text-muted transition-colors hover:bg-surface hover:text-ink"
+            >
+              <Icono nombre={red.nombre} class="h-5 w-5" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <p class="mt-8 flex items-center gap-1.5 text-sm text-muted">
+      <Icono nombre="ubicacion" class="h-4 w-4" />
+      {perfil.ubicacion}
+    </p>
+  </div>
+</section>

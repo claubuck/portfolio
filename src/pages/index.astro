@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Seccion from '../components/Seccion.astro';
+import ProyectoCard from '../components/ProyectoCard.astro';
+import Stack from '../components/Stack.astro';
+import Experiencia from '../components/Experiencia.astro';
+import Contacto from '../components/Contacto.astro';
+import Footer from '../components/Footer.astro';
+import { perfil } from '../data/perfil';
+
+const proyectos = (await getCollection('proyectos')).sort(
+  (a: any, b: any) => a.data.orden - b.data.orden,
+);
+
+const destacados = proyectos.filter((p: any) => p.data.destacado);
+const resto = proyectos.filter((p: any) => !p.data.destacado);
+---
+
+<Layout>
+  <Header />
+
+  <main id="contenido">
+    <Hero />
+
+    <Seccion id="sobre-mi" titulo="Sobre mí">
+      <p class="max-w-3xl text-lg leading-relaxed whitespace-pre-line text-muted">
+        {perfil.bio}
+      </p>
+    </Seccion>
+
+    <Seccion
+      id="proyectos"
+      titulo="Proyectos"
+      descripcion="Una selección de trabajos. Cada uno con el problema que resolvía y mi rol en él."
+    >
+      <div class="space-y-4">
+        {destacados.map((proyecto: any) => <ProyectoCard proyecto={proyecto} />)}
+      </div>
+
+      {
+        resto.length > 0 && (
+          <div class="mt-4 grid gap-4 lg:grid-cols-2">
+            {resto.map((proyecto: any) => (
+              <ProyectoCard proyecto={proyecto} compacto />
+            ))}
+          </div>
+        )
+      }
+    </Seccion>
+
+    <Seccion
+      id="stack"
+      titulo="Stack técnico"
+      descripcion="Las herramientas con las que trabajo a diario."
+    >
+      <Stack />
+    </Seccion>
+
+    <Seccion id="experiencia" titulo="Experiencia">
+      <Experiencia />
+    </Seccion>
+
+    <div id="contacto" class="mx-auto max-w-5xl scroll-mt-24 px-5 pt-8 pb-20">
+      <Contacto />
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

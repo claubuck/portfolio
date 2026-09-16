@@ -1,0 +1,46 @@
+---
+import { perfil } from '../data/perfil';
+import Icono from './Icono.astro';
+
+const anio = new Date().getFullYear();
+const redes = [
+  { nombre: 'github', url: perfil.redes.github, etiqueta: 'GitHub' },
+  { nombre: 'linkedin', url: perfil.redes.linkedin, etiqueta: 'LinkedIn' },
+  {
+    nombre: 'whatsapp',
+    url: perfil.whatsapp ? `https://wa.me/${perfil.whatsapp}` : '',
+    etiqueta: 'WhatsApp',
+  },
+  { nombre: 'mail', url: `mailto:${perfil.email}`, etiqueta: 'Email' },
+].filter((r) => r.url);
+---
+
+<footer class="border-t border-line">
+  <div
+    class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-5 py-8 sm:flex-row"
+  >
+    <p class="text-sm text-muted">
+      © {anio} {perfil.nombre}. Hecho con <a
+        href="https://astro.build"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-accent-text hover:underline">Astro</a
+      >.
+    </p>
+    <div class="flex items-center gap-1">
+      {
+        redes.map((red) => (
+          <a
+            href={red.url}
+            target={red.url.startsWith('mailto:') ? undefined : '_blank'}
+            rel="noopener noreferrer"
+            aria-label={red.etiqueta}
+            class="grid h-10 w-10 place-items-center rounded-lg text-muted transition-colors hover:bg-surface hover:text-ink"
+          >
+            <Icono nombre={red.nombre} class="h-[18px] w-[18px]" />
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</footer>

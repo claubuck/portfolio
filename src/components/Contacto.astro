@@ -1,0 +1,76 @@
+---
+import { perfil } from '../data/perfil';
+import { ruta } from '../utils/ruta';
+import Icono from './Icono.astro';
+
+const canales = [
+  { icono: 'mail', etiqueta: 'Email', valor: perfil.email, url: `mailto:${perfil.email}` },
+  {
+    icono: 'whatsapp',
+    etiqueta: 'WhatsApp',
+    valor: perfil.telefono,
+    url: perfil.whatsapp ? `https://wa.me/${perfil.whatsapp}` : '',
+  },
+  {
+    icono: 'linkedin',
+    etiqueta: 'LinkedIn',
+    valor: 'Conectemos',
+    url: perfil.redes.linkedin,
+  },
+  { icono: 'github', etiqueta: 'GitHub', valor: 'Mi código', url: perfil.redes.github },
+].filter((c) => c.url);
+---
+
+<div class="rounded-2xl border border-line bg-surface p-8 sm:p-12">
+  <div class="mx-auto max-w-2xl text-center">
+    <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">¿Trabajamos juntos?</h2>
+    <p class="mx-auto mt-3 max-w-lg leading-relaxed text-muted">
+      Estoy abierto a oportunidades como <strong class="font-medium text-ink">{perfil.rol}</strong>,
+      presenciales en Tucumán o remotas. Si tienes una vacante o un proyecto en mente, escríbeme y
+      te respondo.
+    </p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a
+        href={`mailto:${perfil.email}`}
+        class="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+      >
+        <Icono nombre="mail" class="h-4 w-4" />
+        {perfil.email}
+      </a>
+      {
+        perfil.cv && (
+          <a
+            href={ruta(perfil.cv)}
+            download
+            class="inline-flex items-center gap-2 rounded-lg border border-line bg-bg px-5 py-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+          >
+            <Icono nombre="descargar" class="h-4 w-4" />
+            Descargar CV
+          </a>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="mt-10 grid gap-3 border-t border-line pt-8 sm:grid-cols-3">
+    {
+      canales.map((canal) => (
+        <a
+          href={canal.url}
+          target={canal.url.startsWith('mailto:') ? undefined : '_blank'}
+          rel="noopener noreferrer"
+          class="flex items-center gap-3 rounded-xl border border-line bg-bg p-4 transition-colors hover:border-accent"
+        >
+          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent-soft text-accent-text">
+            <Icono nombre={canal.icono} class="h-[18px] w-[18px]" />
+          </span>
+          <span class="min-w-0">
+            <span class="block text-xs text-muted">{canal.etiqueta}</span>
+            <span class="block truncate text-sm font-medium">{canal.valor}</span>
+          </span>
+        </a>
+      ))
+    }
+  </div>
+</div>
