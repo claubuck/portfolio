@@ -1,8 +1,8 @@
 # Publica el sitio en GitHub Pages en cada push a main.
 #
-# ANTES DEL PRIMER DEPLOY, en tu repo de GitHub:
+# El paso "Preparar GitHub Pages" intenta activar Pages solo
+# (enablement: true). Si aun así falla con un 404, actívalo a mano:
 #   Settings → Pages → Build and deployment → Source: "GitHub Actions"
-# (No elijas "Deploy from a branch".)
 
 name: Desplegar en GitHub Pages
 
@@ -26,10 +26,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar el código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+
+      # Activa GitHub Pages si todavía no lo está y expone la URL
+      # base del sitio. Sin esto, el deploy final devuelve 404.
+      - name: Preparar GitHub Pages
+        uses: actions/configure-pages@v6
+        with:
+          enablement: true
 
       - name: Preparar Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -41,7 +48,7 @@ jobs:
         run: npm run build
 
       - name: Subir el resultado
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
 
@@ -54,4 +61,4 @@ jobs:
     steps:
       - name: Publicar en GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

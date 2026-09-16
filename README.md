@@ -78,7 +78,16 @@ git push -u origin main
 
 En GitHub: **Settings → Pages → Build and deployment → Source: `GitHub Actions`**.
 
-⚠️ Este paso es obligatorio. Si eliges "Deploy from a branch" el deploy falla.
+⚠️ Este paso es obligatorio. Si Pages nunca se activó, el workflow falla al final con:
+
+```
+Error: Failed to create deployment (status: 404)
+HttpError: Not Found
+Creating Pages deployment failed
+```
+
+El job de compilación sale en verde igual, así que el error engaña: lo que falta no
+es el código, es el interruptor de Pages. Si eliges "Deploy from a branch" también falla.
 
 ### Paso 4 — Listo
 
