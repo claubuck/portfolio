@@ -1,8 +1,12 @@
 # Publica el sitio en GitHub Pages en cada push a main.
 #
-# El paso "Preparar GitHub Pages" intenta activar Pages solo
-# (enablement: true). Si aun así falla con un 404, actívalo a mano:
+# REQUISITO PREVIO, una sola vez y a mano:
 #   Settings → Pages → Build and deployment → Source: "GitHub Actions"
+#
+# No se puede automatizar: el GITHUB_TOKEN del workflow puede
+# desplegar en Pages, pero no puede crear el sitio de Pages (eso
+# exige permisos de administración del repo). Sin ese paso, el job
+# "desplegar" termina siempre en 404.
 
 name: Desplegar en GitHub Pages
 
@@ -27,13 +31,6 @@ jobs:
     steps:
       - name: Descargar el código
         uses: actions/checkout@v7
-
-      # Activa GitHub Pages si todavía no lo está y expone la URL
-      # base del sitio. Sin esto, el deploy final devuelve 404.
-      - name: Preparar GitHub Pages
-        uses: actions/configure-pages@v6
-        with:
-          enablement: true
 
       - name: Preparar Node
         uses: actions/setup-node@v7
