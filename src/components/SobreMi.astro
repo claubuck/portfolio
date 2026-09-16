@@ -1,0 +1,58 @@
+---
+import { perfil } from '../data/perfil';
+import Icono from './Icono.astro';
+
+// La bio viene como un bloque de texto con párrafos separados por
+// línea en blanco; aquí los partimos para maquetarlos bien.
+const parrafos = perfil.bio
+  .split(/\n\s*\n/)
+  .map((p) => p.replace(/\s+/g, ' ').trim())
+  .filter(Boolean);
+---
+
+<div class="grid gap-10 lg:grid-cols-[1.45fr_1fr] lg:gap-14">
+  <div class="revelar space-y-5">
+    {
+      parrafos.map((parrafo, i) => (
+        <p
+          class:list={[
+            'leading-relaxed',
+            i === 0 ? 'text-lg text-tinta sm:text-xl' : 'text-suave',
+          ]}
+        >
+          {parrafo}
+        </p>
+      ))
+    }
+  </div>
+
+  <aside class="revelar foco h-fit rounded-2xl border border-linea bg-superficie p-6" style="--retraso: 120ms">
+    <h3 class="font-mono text-[11px] tracking-[0.18em] text-suave uppercase">De un vistazo</h3>
+
+    <dl class="mt-5 space-y-4 text-sm">
+      <div>
+        <dt class="text-suave">Enfoque actual</dt>
+        <dd class="mt-0.5 font-medium">IA aplicada · Agentes y automatización</dd>
+      </div>
+      <div>
+        <dt class="text-suave">Trabajando en</dt>
+        <dd class="mt-0.5 font-medium">TAXO · Ecuador (remoto)</dd>
+      </div>
+      <div>
+        <dt class="text-suave">Ubicación</dt>
+        <dd class="mt-0.5 flex items-center gap-1.5 font-medium">
+          <Icono nombre="ubicacion" class="h-4 w-4 text-acento-texto" />
+          Tucumán, Argentina
+        </dd>
+      </div>
+      <div>
+        <dt class="text-suave">Modalidad</dt>
+        <dd class="mt-0.5 font-medium">Remoto · Híbrido · Freelance</dd>
+      </div>
+      <div>
+        <dt class="text-suave">Idiomas</dt>
+        <dd class="mt-0.5 font-medium">Español (nativo)</dd>
+      </div>
+    </dl>
+  </aside>
+</div>

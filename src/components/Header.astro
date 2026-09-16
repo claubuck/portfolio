@@ -10,24 +10,34 @@ const iniciales = perfil.nombre
   .slice(0, 2);
 ---
 
-<header class="sticky top-0 z-40 border-b border-line/70 bg-bg/80 backdrop-blur-md">
-  <div class="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-5">
-    <a href="#inicio" class="flex items-center gap-2.5 font-semibold tracking-tight">
+<header
+  id="cabecera"
+  class="sticky top-0 z-40 border-b border-transparent transition-all duration-300"
+>
+  <div class="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-5 sm:h-18">
+    <a href="#inicio" class="group flex items-center gap-2.5" aria-label="Volver al inicio">
       <span
-        class="grid h-8 w-8 place-items-center rounded-lg bg-accent text-[13px] font-bold text-white"
+        class="grid h-9 w-9 place-items-center rounded-xl fondo-degradado font-display text-[13px] font-bold text-white transition-transform duration-300 group-hover:scale-105"
         >{iniciales}</span
       >
-      <span class="hidden text-sm sm:block">{perfil.nombre}</span>
+      <span class="hidden font-display text-sm font-semibold tracking-tight sm:block">
+        {perfil.nombre}
+      </span>
     </a>
 
-    <nav class="hidden items-center gap-1 md:flex" aria-label="Navegación principal">
+    <nav class="hidden items-center gap-0.5 md:flex" aria-label="Navegación principal">
       {
         navegacion.map((item) => (
           <a
             href={item.href}
-            class="rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-ink"
+            data-nav
+            class="group relative rounded-lg px-3.5 py-2 text-sm text-suave transition-colors duration-200 hover:text-tinta data-[activo]:text-tinta"
           >
             {item.texto}
+            <span
+              aria-hidden="true"
+              class="absolute inset-x-3.5 -bottom-0.5 h-px scale-x-0 fondo-degradado transition-transform duration-300 group-data-[activo]:scale-x-100"
+            />
           </a>
         ))
       }
@@ -38,7 +48,7 @@ const iniciales = perfil.nombre
       <button
         id="btn-menu"
         type="button"
-        class="grid h-9 w-9 place-items-center rounded-lg border border-line text-muted md:hidden"
+        class="grid h-9 w-9 place-items-center rounded-lg border border-linea text-suave transition-colors hover:text-tinta md:hidden"
         aria-label="Abrir menú"
         aria-expanded="false"
         aria-controls="menu-movil"
@@ -46,26 +56,29 @@ const iniciales = perfil.nombre
         <Icono nombre="menu" class="h-[18px] w-[18px]" />
       </button>
       <a
-        href={`mailto:${perfil.email}`}
-        class="hidden rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 md:block"
+        href="#contacto"
+        class="hidden rounded-lg border border-linea bg-superficie px-4 py-2 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:border-acento hover:text-acento-texto md:block"
       >
         Contáctame
       </a>
     </div>
   </div>
 
-  <div id="menu-movil" class="hidden border-t border-line bg-bg md:hidden">
+  <div id="menu-movil" class="hidden border-t border-linea bg-bg/95 backdrop-blur-xl md:hidden">
     <nav class="mx-auto flex max-w-5xl flex-col px-5 py-2" aria-label="Navegación móvil">
       {
         navegacion.map((item) => (
-          <a href={item.href} class="rounded-lg px-2 py-3 text-sm text-muted hover:text-ink">
+          <a
+            href={item.href}
+            class="rounded-lg px-2 py-3.5 text-sm text-suave transition-colors hover:text-tinta"
+          >
             {item.texto}
           </a>
         ))
       }
       <a
-        href={`mailto:${perfil.email}`}
-        class="my-2 rounded-lg bg-accent px-4 py-2.5 text-center text-sm font-medium text-white"
+        href="#contacto"
+        class="my-2 rounded-lg fondo-degradado px-4 py-3 text-center text-sm font-semibold text-white"
       >
         Contáctame
       </a>
@@ -76,6 +89,7 @@ const iniciales = perfil.nombre
 <script>
   const btn = document.getElementById('btn-menu');
   const menu = document.getElementById('menu-movil');
+  const cabecera = document.getElementById('cabecera');
 
   btn?.addEventListener('click', () => {
     const abierto = menu?.classList.toggle('hidden') === false;
@@ -90,4 +104,16 @@ const iniciales = perfil.nombre
       btn?.setAttribute('aria-expanded', 'false');
     });
   });
+
+  // El fondo del header aparece recién al hacer scroll: arriba
+  // del todo, el hero se ve limpio y sin línea divisoria.
+  const alternarFondo = () => {
+    const bajado = window.scrollY > 24;
+    cabecera?.classList.toggle('border-linea', bajado);
+    cabecera?.classList.toggle('bg-bg/80', bajado);
+    cabecera?.classList.toggle('backdrop-blur-xl', bajado);
+  };
+
+  alternarFondo();
+  window.addEventListener('scroll', alternarFondo, { passive: true });
 </script>

@@ -3,29 +3,40 @@ import { experiencia, formacion } from '../data/perfil';
 import Icono from './Icono.astro';
 ---
 
-<div class="space-y-10">
-  <ol class="relative space-y-10 border-l border-line pl-7">
+<div class="space-y-12">
+  <ol class="relative space-y-12">
+    <!-- Línea vertical con degradado que se desvanece al final -->
+    <span
+      aria-hidden="true"
+      class="absolute top-2 bottom-2 left-[7px] w-px"
+      style="background: linear-gradient(to bottom, var(--c-acento), var(--c-acento-2) 55%, transparent);"
+    ></span>
+
     {
-      experiencia.map((puesto) => (
-        <li class="relative">
+      experiencia.map((puesto, i) => (
+        <li class="revelar relative pl-10" style={`--retraso: ${i * 90}ms`}>
           <span
             aria-hidden="true"
-            class="absolute -left-[33px] top-1.5 grid h-3 w-3 place-items-center rounded-full border-2 border-bg bg-accent"
+            class="absolute top-1.5 left-0 grid h-[15px] w-[15px] place-items-center rounded-full border-2 border-bg fondo-degradado ring-4 ring-bg"
           />
-          <p class="font-mono text-xs text-muted">{puesto.periodo}</p>
-          <h3 class="mt-1.5 text-lg font-semibold tracking-tight">{puesto.puesto}</h3>
-          <p class="font-medium text-accent-text">{puesto.empresa}</p>
+
+          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <h3 class="font-display text-xl font-bold tracking-tight">{puesto.puesto}</h3>
+            <span class="font-mono text-xs text-suave">{puesto.periodo}</span>
+          </div>
+
+          <p class="mt-1 font-medium text-acento-texto">{puesto.empresa}</p>
 
           {puesto.contexto && (
-            <p class="mt-2 text-sm leading-relaxed text-muted italic">{puesto.contexto}</p>
+            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-suave">{puesto.contexto}</p>
           )}
 
-          <ul class="mt-3.5 space-y-2">
+          <ul class="mt-4 space-y-2.5">
             {puesto.logros.map((logro) => (
-              <li class="relative pl-4 leading-relaxed text-muted">
+              <li class="relative max-w-2xl pl-5 leading-relaxed text-suave">
                 <span
                   aria-hidden="true"
-                  class="absolute left-0 top-[0.65em] h-[5px] w-[5px] rounded-full bg-accent"
+                  class="absolute top-[0.6em] left-0 h-1.5 w-1.5 rotate-45 rounded-[2px] fondo-degradado"
                 />
                 {logro}
               </li>
@@ -33,13 +44,13 @@ import Icono from './Icono.astro';
           </ul>
 
           {puesto.enlaces.length > 0 && (
-            <div class="mt-4 flex flex-wrap gap-2">
+            <div class="mt-5 flex flex-wrap gap-2">
               {puesto.enlaces.map((enlace) => (
                 <a
                   href={enlace.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-2.5 py-1 font-mono text-xs text-muted transition-colors hover:border-accent hover:text-accent"
+                  class="inline-flex items-center gap-1.5 rounded-lg border border-linea bg-superficie px-3 py-1.5 font-mono text-xs text-suave transition-all duration-300 hover:-translate-y-0.5 hover:border-acento hover:text-acento-texto"
                 >
                   <Icono nombre="externo" class="h-3 w-3" />
                   {enlace.texto}
@@ -54,16 +65,22 @@ import Icono from './Icono.astro';
 
   {
     formacion.length > 0 && (
-      <div class="rounded-xl border border-line bg-surface p-6">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-muted">Formación</h3>
-        <ul class="mt-4 space-y-3">
+      <div class="revelar foco rounded-2xl border border-linea bg-superficie p-7">
+        <div class="flex items-center gap-3">
+          <span class="grid h-10 w-10 place-items-center rounded-xl border border-linea bg-bg text-acento-texto">
+            <Icono nombre="birrete" class="h-5 w-5" />
+          </span>
+          <h3 class="font-display text-base font-semibold tracking-tight">Formación</h3>
+        </div>
+
+        <ul class="mt-5 divide-y divide-linea">
           {formacion.map((f) => (
-            <li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <span>
+            <li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3 first:pt-0 last:pb-0">
+              <span class="min-w-0">
                 <span class="font-medium">{f.titulo}</span>
-                <span class="text-muted"> · {f.institucion}</span>
+                <span class="text-suave"> · {f.institucion}</span>
               </span>
-              <span class="shrink-0 font-mono text-xs text-muted">{f.periodo}</span>
+              <span class="shrink-0 font-mono text-xs text-suave">{f.periodo}</span>
             </li>
           ))}
         </ul>

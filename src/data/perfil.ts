@@ -42,6 +42,16 @@ adoptar rápidamente nuevas tecnologías.`,
 } as const;
 
 // ── Stack técnico ──────────────────────────────────────────────
+// ── Cifras del hero ───────────────────────────────────────────
+// Todas salen de tu CV. Si no puedes respaldar una cifra en una
+// entrevista, bórrala: una sola inflada te cuesta el puesto.
+export const estadisticas = [
+  { valor: '15+', etiqueta: 'Años de experiencia' },
+  { valor: 'Millones', etiqueta: 'De documentos procesados' },
+  { valor: '3', etiqueta: 'Organismos públicos' },
+  { valor: '100%', etiqueta: 'Dockerizado desde 2020' },
+];
+
 export const stack = [
   {
     categoria: 'Inteligencia Artificial',

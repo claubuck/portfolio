@@ -5,91 +5,275 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
-/* ── Tokens de color ──────────────────────────────────────────
-   Cambia el acento aquí y cambia en todo el sitio.            */
+/* ═══════════════════════════════════════════════════════════
+   TOKENS DE COLOR
+   Cambia --c-acento y --c-acento-2 y muta el sitio entero.
+   ═══════════════════════════════════════════════════════════ */
 :root {
-  --c-bg: #ffffff;
-  --c-surface: #f6f7f9;
-  --c-border: #e3e6ea;
-  --c-text: #14171c;
-  --c-muted: #5b6472;
-  --c-accent: #2563eb;
-  --c-accent-soft: #eff4ff;
-  --c-accent-text: #1d4ed8;
+  --c-bg: #fbfbfd;
+  --c-superficie: #ffffff;
+  --c-elevado: #ffffff;
+  --c-borde: rgb(12 12 24 / 0.09);
+  --c-borde-fuerte: rgb(12 12 24 / 0.16);
+  --c-texto: #0b0b12;
+  --c-suave: #56566b;
+  --c-acento: #7c3aed;
+  --c-acento-2: #0891b2;
+  --c-acento-texto: #6d28d9;
+  --c-acento-tenue: rgb(124 58 237 / 0.09);
+  --c-brillo: rgb(124 58 237 / 0.14);
+  --grano: 0.035;
 }
 
 [data-theme="dark"] {
-  --c-bg: #0c0e12;
-  --c-surface: #14171d;
-  --c-border: #252a33;
-  --c-text: #e9ecf1;
-  --c-muted: #99a2b1;
-  --c-accent: #5b8cff;
-  --c-accent-soft: #171f33;
-  --c-accent-text: #8fb0ff;
+  --c-bg: #07070c;
+  --c-superficie: #0f0f16;
+  --c-elevado: #14141d;
+  --c-borde: rgb(255 255 255 / 0.08);
+  --c-borde-fuerte: rgb(255 255 255 / 0.16);
+  --c-texto: #f3f3f7;
+  --c-suave: #9a9aae;
+  --c-acento: #a78bfa;
+  --c-acento-2: #22d3ee;
+  --c-acento-texto: #c4b5fd;
+  --c-acento-tenue: rgb(167 139 250 / 0.12);
+  --c-brillo: rgb(139 92 246 / 0.22);
+  --grano: 0.055;
 }
 
 @theme inline {
   --color-bg: var(--c-bg);
-  --color-surface: var(--c-surface);
-  --color-line: var(--c-border);
-  --color-ink: var(--c-text);
-  --color-muted: var(--c-muted);
-  --color-accent: var(--c-accent);
-  --color-accent-soft: var(--c-accent-soft);
-  --color-accent-text: var(--c-accent-text);
+  --color-superficie: var(--c-superficie);
+  --color-elevado: var(--c-elevado);
+  --color-linea: var(--c-borde);
+  --color-linea-fuerte: var(--c-borde-fuerte);
+  --color-tinta: var(--c-texto);
+  --color-suave: var(--c-suave);
+  --color-acento: var(--c-acento);
+  --color-acento-2: var(--c-acento-2);
+  --color-acento-texto: var(--c-acento-texto);
+  --color-acento-tenue: var(--c-acento-tenue);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════ */
 html {
   scroll-behavior: smooth;
-  /* Para que los anclajes no queden tapados por el header fijo. */
-  scroll-padding-top: 5rem;
+  scroll-padding-top: 6rem;
   background-color: var(--c-bg);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   background-color: var(--c-bg);
-  color: var(--c-text);
+  color: var(--c-texto);
   -webkit-font-smoothing: antialiased;
-}
-
-/* Respeta a quien pidió menos movimiento en su sistema. */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
 ::selection {
-  background-color: var(--c-accent);
+  background-color: var(--c-acento);
   color: #fff;
 }
 
 :focus-visible {
-  outline: 2px solid var(--c-accent);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 2px solid var(--c-acento);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-/* Estilos del cuerpo de cada proyecto (el Markdown renderizado). */
-.prosa { color: var(--c-muted); line-height: 1.7; }
-.prosa p { margin-block: 0.75rem; }
-.prosa strong { color: var(--c-text); font-weight: 600; }
-.prosa ul { margin-block: 0.75rem; padding-inline-start: 1.1rem; list-style: none; }
-.prosa li { position: relative; margin-block: 0.4rem; padding-inline-start: 0.85rem; }
+/* Barra de scroll discreta y acorde al tema */
+@supports (scrollbar-width: thin) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-borde-fuerte) transparent;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TEXTURA Y FONDO
+   ═══════════════════════════════════════════════════════════ */
+
+/* Grano sutil sobre todo el sitio: le quita el aspecto plano
+   y digital a los degradados grandes. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: var(--grano);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Retícula de puntos, apenas perceptible, para dar profundidad. */
+.reticula {
+  background-image: radial-gradient(circle at 1px 1px, var(--c-borde-fuerte) 1px, transparent 0);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 40%, transparent 78%);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILIDADES DE MARCA
+   ═══════════════════════════════════════════════════════════ */
+
+.texto-degradado {
+  background-image: linear-gradient(115deg, var(--c-acento) 0%, var(--c-acento-2) 55%, var(--c-acento) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: deslizar-degradado 8s ease-in-out infinite;
+}
+
+@keyframes deslizar-degradado {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+
+.fondo-degradado {
+  background-image: linear-gradient(115deg, var(--c-acento), var(--c-acento-2));
+}
+
+/* Borde degradado real, sin hacks de doble div. */
+.borde-degradado {
+  position: relative;
+}
+.borde-degradado::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, var(--c-acento), transparent 45%, transparent 60%, var(--c-acento-2));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity 0.4s ease;
+}
+.borde-degradado:hover::before { opacity: 1; }
+
+/* Foco de luz que sigue al cursor dentro de una tarjeta.
+   Las coordenadas las escribe el JS en --mx / --my. */
+.foco {
+  position: relative;
+  isolation: isolate;
+}
+.foco::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 50%),
+    var(--c-brillo),
+    transparent 65%
+  );
+}
+.foco:hover::after { opacity: 1; }
+
+/* Resplandores de fondo tipo aurora. */
+.aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+@keyframes flotar {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(3%, -4%, 0) scale(1.07); }
+  66% { transform: translate3d(-3%, 3%, 0) scale(0.95); }
+}
+
+.animar-flotar { animation: flotar 18s ease-in-out infinite; }
+.animar-flotar-lento { animation: flotar 26s ease-in-out infinite reverse; }
+
+/* ═══════════════════════════════════════════════════════════
+   REVELADO AL HACER SCROLL
+   El JS añade .visible cuando el elemento entra en pantalla.
+   Sin JS (o con movimiento reducido) todo se ve igual: la
+   opacidad 0 solo se aplica si <html> tiene la clase js-activo.
+   ═══════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: no-preference) {
+  .js-activo .revelar {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--retraso, 0ms);
+  }
+  .js-activo .revelar.visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CINTA DE TECNOLOGÍAS
+   ═══════════════════════════════════════════════════════════ */
+@keyframes desplazar {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.cinta-pista {
+  display: flex;
+  width: max-content;
+  animation: desplazar var(--duracion, 45s) linear infinite;
+}
+.cinta:hover .cinta-pista { animation-play-state: paused; }
+
+/* ═══════════════════════════════════════════════════════════
+   PROSA (el Markdown de cada proyecto)
+   ═══════════════════════════════════════════════════════════ */
+.prosa { color: var(--c-suave); line-height: 1.75; }
+.prosa p { margin-block: 0.8rem; }
+.prosa strong { color: var(--c-texto); font-weight: 600; }
+.prosa em { color: var(--c-acento-texto); font-style: normal; }
+.prosa ul { margin-block: 0.9rem; padding-inline-start: 0; list-style: none; }
+.prosa li { position: relative; margin-block: 0.5rem; padding-inline-start: 1.3rem; }
 .prosa li::before {
   content: "";
   position: absolute;
   inset-inline-start: 0;
-  top: 0.65em;
-  width: 5px; height: 5px;
-  border-radius: 999px;
-  background-color: var(--c-accent);
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background-image: linear-gradient(135deg, var(--c-acento), var(--c-acento-2));
+  transform: rotate(45deg);
 }
-.prosa a { color: var(--c-accent-text); text-decoration: underline; text-underline-offset: 3px; }
+.prosa a {
+  color: var(--c-acento-texto);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOVIMIENTO REDUCIDO: se respeta siempre, al final de todo.
+   ═══════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .cinta-pista { animation: none; }
+}

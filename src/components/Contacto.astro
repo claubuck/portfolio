@@ -21,29 +21,56 @@ const canales = [
 ].filter((c) => c.url);
 ---
 
-<div class="rounded-2xl border border-line bg-surface p-8 sm:p-12">
+<div
+  class="revelar relative isolate overflow-hidden rounded-3xl border border-linea bg-superficie px-6 py-14 sm:px-12 sm:py-20"
+>
+  <!-- Auroras contenidas dentro de la tarjeta -->
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+    <div
+      class="aurora animar-flotar -top-24 left-[15%] h-72 w-72"
+      style="background: var(--c-acento); opacity: 0.22;"
+    >
+    </div>
+    <div
+      class="aurora animar-flotar-lento -bottom-28 right-[10%] h-72 w-72"
+      style="background: var(--c-acento-2); opacity: 0.18;"
+    >
+    </div>
+  </div>
+
   <div class="mx-auto max-w-2xl text-center">
-    <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">¿Trabajamos juntos?</h2>
-    <p class="mx-auto mt-3 max-w-lg leading-relaxed text-muted">
-      Estoy abierto a oportunidades como <strong class="font-medium text-ink">{perfil.rol}</strong>,
-      presenciales en Tucumán o remotas. Si tienes una vacante o un proyecto en mente, escríbeme y
-      te respondo.
+    <p class="font-mono text-xs tracking-[0.2em] text-acento-texto uppercase">Contacto</p>
+
+    <h2 class="mt-4 font-display text-3xl font-bold tracking-tight sm:text-5xl">
+      ¿Trabajamos <span class="texto-degradado">juntos</span>?
+    </h2>
+
+    <p class="mx-auto mt-5 max-w-xl leading-relaxed text-suave">
+      Estoy abierto a oportunidades como <strong class="font-medium text-tinta"
+        >{perfil.rol}</strong
+      >, remotas o en Tucumán. Si tienes una vacante o un proyecto en mente, escríbeme y te
+      respondo.
     </p>
 
-    <div class="mt-8 flex flex-wrap justify-center gap-3">
+    <div class="mt-9 flex flex-wrap justify-center gap-3">
       <a
         href={`mailto:${perfil.email}`}
-        class="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+        class="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl fondo-degradado px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-acento/25 transition-transform duration-300 hover:-translate-y-0.5"
       >
-        <Icono nombre="mail" class="h-4 w-4" />
-        {perfil.email}
+        <span
+          aria-hidden="true"
+          class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full"
+        ></span>
+        <Icono nombre="mail" class="relative h-4 w-4" />
+        <span class="relative">Escríbeme</span>
       </a>
+
       {
         perfil.cv && (
           <a
             href={ruta(perfil.cv)}
             download
-            class="inline-flex items-center gap-2 rounded-lg border border-line bg-bg px-5 py-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+            class="inline-flex items-center gap-2 rounded-xl border border-linea bg-bg px-6 py-3.5 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:border-acento hover:text-acento-texto"
           >
             <Icono nombre="descargar" class="h-4 w-4" />
             Descargar CV
@@ -53,22 +80,28 @@ const canales = [
     </div>
   </div>
 
-  <div class="mt-10 grid gap-3 border-t border-line pt-8 sm:grid-cols-3">
+  <div class="mx-auto mt-12 grid max-w-3xl gap-3 sm:grid-cols-2">
     {
       canales.map((canal) => (
         <a
           href={canal.url}
           target={canal.url.startsWith('mailto:') ? undefined : '_blank'}
           rel="noopener noreferrer"
-          class="flex items-center gap-3 rounded-xl border border-line bg-bg p-4 transition-colors hover:border-accent"
+          class="group foco flex items-center gap-3.5 rounded-2xl border border-linea bg-bg p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-linea-fuerte"
         >
-          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent-soft text-accent-text">
-            <Icono nombre={canal.icono} class="h-[18px] w-[18px]" />
+          <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-linea bg-superficie text-acento-texto transition-transform duration-500 group-hover:scale-110">
+            <Icono nombre={canal.icono} class="h-5 w-5" />
           </span>
-          <span class="min-w-0">
-            <span class="block text-xs text-muted">{canal.etiqueta}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-mono text-[11px] tracking-wider text-suave uppercase">
+              {canal.etiqueta}
+            </span>
             <span class="block truncate text-sm font-medium">{canal.valor}</span>
           </span>
+          <Icono
+            nombre="flecha"
+            class="h-4 w-4 shrink-0 -translate-x-1 text-acento-texto opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+          />
         </a>
       ))
     }

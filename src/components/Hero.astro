@@ -1,5 +1,5 @@
 ---
-import { perfil } from '../data/perfil';
+import { perfil, estadisticas } from '../data/perfil';
 import { ruta } from '../utils/ruta';
 import Icono from './Icono.astro';
 
@@ -12,50 +12,88 @@ const redes = [
     etiqueta: 'WhatsApp',
   },
 ].filter((r) => r.url);
+
+// El nombre se parte para dar el degradado solo al apellido.
+const partes = perfil.nombre.split(' ');
+const apellido = partes.pop();
+const nombrePila = partes.join(' ');
 ---
 
-<section id="inicio" class="relative overflow-hidden border-b border-line">
-  <!-- Resplandor decorativo detrás del texto -->
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[46rem] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl"
-  >
+<section id="inicio" class="relative isolate overflow-hidden">
+  <!-- Auroras de fondo -->
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+    <div
+      class="aurora animar-flotar -top-32 left-[8%] h-[30rem] w-[30rem]"
+      style="background: var(--c-acento); opacity: 0.20;"
+    >
+    </div>
+    <div
+      class="aurora animar-flotar-lento top-16 right-[4%] h-[26rem] w-[26rem]"
+      style="background: var(--c-acento-2); opacity: 0.16;"
+    >
+    </div>
+    <div class="reticula absolute inset-0 opacity-70"></div>
   </div>
 
-  <div class="relative mx-auto max-w-5xl px-5 py-20 sm:py-28">
-    <p
-      class="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-medium text-muted"
-    >
-      <span class="relative flex h-2 w-2">
-        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70"></span>
-        <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-      </span>
-      Disponible para nuevos proyectos
-    </p>
+  <div class="mx-auto max-w-5xl px-5 pt-20 pb-16 sm:pt-32 sm:pb-24">
+    <div class="revelar">
+      <p
+        class="inline-flex items-center gap-2.5 rounded-full border border-linea bg-superficie/70 px-4 py-1.5 text-xs font-medium backdrop-blur-sm"
+      >
+        <span class="relative flex h-2 w-2">
+          <span
+            class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"
+          ></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+        </span>
+        Disponible para nuevos proyectos
+      </p>
+    </div>
 
-    <h1 class="max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
-      {perfil.nombre}
+    <h1
+      class="revelar mt-7 font-display text-5xl leading-[0.95] font-bold tracking-tight sm:text-7xl lg:text-[5.5rem]"
+      style="--retraso: 80ms"
+    >
+      {nombrePila}
+      <span class="block texto-degradado pb-2">{apellido}</span>
     </h1>
 
-    <p class="mt-3 text-lg font-semibold text-accent-text sm:text-xl">
-      {perfil.rol}
-    </p>
+    <div class="revelar mt-6 flex flex-wrap items-center gap-x-3 gap-y-2" style="--retraso: 160ms">
+      <span class="font-display text-xl font-semibold sm:text-2xl">{perfil.rol}</span>
+      <span aria-hidden="true" class="h-4 w-px bg-linea-fuerte"></span>
+      <span class="flex items-center gap-1.5 text-sm text-suave">
+        <Icono nombre="ubicacion" class="h-4 w-4" />
+        Tucumán, Argentina
+      </span>
+    </div>
 
-    <p class="mt-2 font-mono text-sm text-muted">
+    <p class="revelar mt-3 font-mono text-xs tracking-wide text-acento-texto sm:text-sm" style="--retraso: 200ms">
       {perfil.especialidades}
     </p>
 
-    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
+    <p
+      class="revelar mt-8 max-w-2xl text-lg leading-relaxed text-suave sm:text-xl"
+      style="--retraso: 260ms"
+    >
       {perfil.titular}
     </p>
 
-    <div class="mt-9 flex flex-wrap items-center gap-3">
+    <!-- Llamados a la acción -->
+    <div class="revelar mt-10 flex flex-wrap items-center gap-3" style="--retraso: 320ms">
       <a
         href="#proyectos"
-        class="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+        class="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl fondo-degradado px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-acento/25 transition-transform duration-300 hover:-translate-y-0.5"
       >
-        Ver proyectos
-        <Icono nombre="flecha" class="h-4 w-4" />
+        <!-- Brillo que barre el botón al pasar el cursor -->
+        <span
+          aria-hidden="true"
+          class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full"
+        ></span>
+        <span class="relative">Ver proyectos</span>
+        <Icono
+          nombre="flecha"
+          class="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+        />
       </a>
 
       {
@@ -63,15 +101,18 @@ const redes = [
           <a
             href={ruta(perfil.cv)}
             download
-            class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-5 py-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+            class="group inline-flex items-center gap-2 rounded-xl border border-linea bg-superficie/70 px-6 py-3.5 text-sm font-semibold backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-acento hover:text-acento-texto"
           >
-            <Icono nombre="descargar" class="h-4 w-4" />
+            <Icono
+              nombre="descargar"
+              class="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5"
+            />
             Descargar CV
           </a>
         )
       }
 
-      <div class="flex items-center gap-1">
+      <div class="flex items-center gap-1 sm:ml-2">
         {
           redes.map((red) => (
             <a
@@ -79,7 +120,7 @@ const redes = [
               target="_blank"
               rel="noopener noreferrer"
               aria-label={red.etiqueta}
-              class="grid h-11 w-11 place-items-center rounded-lg text-muted transition-colors hover:bg-surface hover:text-ink"
+              class="grid h-12 w-12 place-items-center rounded-xl border border-transparent text-suave transition-all duration-300 hover:-translate-y-0.5 hover:border-linea hover:bg-superficie hover:text-tinta"
             >
               <Icono nombre={red.nombre} class="h-5 w-5" />
             </a>
@@ -88,9 +129,24 @@ const redes = [
       </div>
     </div>
 
-    <p class="mt-8 flex items-center gap-1.5 text-sm text-muted">
-      <Icono nombre="ubicacion" class="h-4 w-4" />
-      {perfil.ubicacion}
-    </p>
+    <!-- Cifras -->
+    <dl
+      class="revelar mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-linea bg-linea sm:grid-cols-4"
+      style="--retraso: 400ms"
+    >
+      {
+        estadisticas.map((dato) => (
+          <div class="bg-bg px-5 py-6 text-center transition-colors duration-300 hover:bg-superficie">
+            <dt class="sr-only">{dato.etiqueta}</dt>
+            <dd>
+              <span class="block font-display text-2xl font-bold tracking-tight sm:text-3xl">
+                {dato.valor}
+              </span>
+              <span class="mt-1.5 block text-xs leading-snug text-suave">{dato.etiqueta}</span>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
   </div>
 </section>

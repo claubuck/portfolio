@@ -1,0 +1,36 @@
+---
+import { stack } from '../data/perfil';
+
+// Cinta infinita de tecnologías. La lista se duplica porque la
+// animación desplaza exactamente el 50% del ancho: al llegar,
+// la segunda copia está justo donde empezó la primera y el
+// salto es invisible.
+const tecnologias = stack.flatMap((g) => g.items);
+const pista = [...tecnologias, ...tecnologias];
+---
+
+<div
+  class="cinta relative overflow-hidden border-y border-linea bg-superficie/40 py-5"
+  aria-hidden="true"
+>
+  <!-- Difuminado en los bordes para que entren y salgan sin corte seco -->
+  <div
+    class="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-bg to-transparent"
+  >
+  </div>
+  <div
+    class="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-bg to-transparent"
+  >
+  </div>
+
+  <div class="cinta-pista gap-3" style="--duracion: 60s">
+    {
+      pista.map((tec) => (
+        <span class="flex shrink-0 items-center gap-3 font-mono text-sm whitespace-nowrap text-suave">
+          {tec}
+          <span class="h-1 w-1 rounded-full fondo-degradado opacity-70" />
+        </span>
+      ))
+    }
+  </div>
+</div>

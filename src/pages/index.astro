@@ -3,13 +3,14 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
+import Cinta from '../components/Cinta.astro';
 import Seccion from '../components/Seccion.astro';
+import SobreMi from '../components/SobreMi.astro';
 import ProyectoCard from '../components/ProyectoCard.astro';
 import Stack from '../components/Stack.astro';
 import Experiencia from '../components/Experiencia.astro';
 import Contacto from '../components/Contacto.astro';
 import Footer from '../components/Footer.astro';
-import { perfil } from '../data/perfil';
 
 const proyectos = (await getCollection('proyectos')).sort(
   (a: any, b: any) => a.data.orden - b.data.orden,
@@ -25,26 +26,31 @@ const resto = proyectos.filter((p: any) => !p.data.destacado);
   <main id="contenido">
     <Hero />
 
-    <Seccion id="sobre-mi" titulo="Sobre mí">
-      <p class="max-w-3xl text-lg leading-relaxed whitespace-pre-line text-muted">
-        {perfil.bio}
-      </p>
+    <Cinta />
+
+    <Seccion id="sobre-mi" numero="01" titulo="Sobre mí">
+      <SobreMi />
     </Seccion>
 
     <Seccion
       id="proyectos"
+      numero="02"
       titulo="Proyectos"
-      descripcion="Una selección de trabajos. Cada uno con el problema que resolvía y mi rol en él."
+      descripcion="Sistemas en producción. Cada uno con el problema que resolvía, mi rol y el enlace para verlo funcionando."
     >
-      <div class="space-y-4">
-        {destacados.map((proyecto: any) => <ProyectoCard proyecto={proyecto} />)}
+      <div class="space-y-5">
+        {
+          destacados.map((proyecto: any, i: number) => (
+            <ProyectoCard proyecto={proyecto} indice={i} />
+          ))
+        }
       </div>
 
       {
         resto.length > 0 && (
-          <div class="mt-4 grid gap-4 lg:grid-cols-2">
-            {resto.map((proyecto: any) => (
-              <ProyectoCard proyecto={proyecto} compacto />
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            {resto.map((proyecto: any, i: number) => (
+              <ProyectoCard proyecto={proyecto} indice={destacados.length + i} compacto />
             ))}
           </div>
         )
@@ -53,17 +59,18 @@ const resto = proyectos.filter((p: any) => !p.data.destacado);
 
     <Seccion
       id="stack"
+      numero="03"
       titulo="Stack técnico"
-      descripcion="Las herramientas con las que trabajo a diario."
+      descripcion="Las herramientas con las que trabajo a diario, ordenadas por lo que más peso tiene hoy en mi trabajo."
     >
       <Stack />
     </Seccion>
 
-    <Seccion id="experiencia" titulo="Experiencia">
+    <Seccion id="experiencia" numero="04" titulo="Experiencia">
       <Experiencia />
     </Seccion>
 
-    <div id="contacto" class="mx-auto max-w-5xl scroll-mt-24 px-5 pt-8 pb-20">
+    <div id="contacto" class="mx-auto max-w-5xl scroll-mt-24 px-5 pt-8 pb-24">
       <Contacto />
     </div>
   </main>

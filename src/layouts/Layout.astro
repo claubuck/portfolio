@@ -25,13 +25,15 @@ const urlCanonica = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={descripcion} />
     <meta name="author" content={perfil.nombre} />
     <link rel="canonical" href={urlCanonica} />
+    <meta name="theme-color" content="#07070c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)" />
 
     <!-- Cómo se ve el link al compartirlo en LinkedIn o WhatsApp -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="profile" />
     <meta property="og:title" content={titulo} />
     <meta property="og:description" content={descripcion} />
     <meta property="og:url" content={urlCanonica} />
-    <meta property="og:locale" content="es_ES" />
+    <meta property="og:locale" content="es_AR" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" type="image/svg+xml" href={ruta('favicon.svg')} />
@@ -41,13 +43,31 @@ const urlCanonica = new URL(Astro.url.pathname, Astro.site);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
     />
 
-    <!-- Aplica el tema guardado antes de pintar, para que no haya
-         un parpadeo blanco al cargar en modo oscuro. -->
+    <!-- Ficha de datos estructurados: ayuda a que Google entienda
+         que esto es el perfil de una persona y no un blog. -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: perfil.nombre,
+        jobTitle: perfil.rol,
+        email: `mailto:${perfil.email}`,
+        url: urlCanonica.href,
+        sameAs: [perfil.redes.linkedin, perfil.redes.github].filter(Boolean),
+        description: perfil.titular,
+      })}
+    />
+
+    <!-- Se ejecuta antes de pintar: aplica el tema guardado (sin
+         parpadeo blanco) y marca que hay JS, para que las
+         animaciones de entrada solo existan si pueden completarse. -->
     <script is:inline>
       (function () {
+        document.documentElement.classList.add('js-activo');
         try {
           var guardado = localStorage.getItem('tema');
           if (guardado === 'light' || guardado === 'dark') {
@@ -65,10 +85,68 @@ const urlCanonica = new URL(Astro.url.pathname, Astro.site);
   <body class="font-sans antialiased">
     <a
       href="#contenido"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-white"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-acento focus:px-4 focus:py-2 focus:text-white"
     >
       Saltar al contenido
     </a>
     <slot />
+
+    <script>
+      // ── Revelado progresivo al hacer scroll ──────────────────
+      const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const objetivos = document.querySelectorAll<HTMLElement>('.revelar');
+
+      if (reducido || !('IntersectionObserver' in window)) {
+        objetivos.forEach((el) => el.classList.add('visible'));
+      } else {
+        const observador = new IntersectionObserver(
+          (entradas) => {
+            entradas.forEach((entrada) => {
+              if (entrada.isIntersecting) {
+                entrada.target.classList.add('visible');
+                observador.unobserve(entrada.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.1 },
+        );
+        objetivos.forEach((el) => observador.observe(el));
+      }
+
+      // ── Foco de luz siguiendo al cursor en las tarjetas ──────
+      // Solo en dispositivos con puntero fino: en móvil no aporta
+      // nada y gastaría batería.
+      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && !reducido) {
+        document.querySelectorAll<HTMLElement>('.foco').forEach((tarjeta) => {
+          tarjeta.addEventListener('pointermove', (evento) => {
+            const caja = tarjeta.getBoundingClientRect();
+            tarjeta.style.setProperty('--mx', `${evento.clientX - caja.left}px`);
+            tarjeta.style.setProperty('--my', `${evento.clientY - caja.top}px`);
+          });
+        });
+      }
+
+      // ── Resalta en el menú la sección que se está viendo ─────
+      const enlacesNav = document.querySelectorAll<HTMLAnchorElement>('[data-nav]');
+      const secciones = [...enlacesNav]
+        .map((a) => document.querySelector(a.getAttribute('href') || ''))
+        .filter((s): s is Element => s !== null);
+
+      if (secciones.length && 'IntersectionObserver' in window) {
+        const espia = new IntersectionObserver(
+          (entradas) => {
+            entradas.forEach((entrada) => {
+              if (!entrada.isIntersecting) return;
+              enlacesNav.forEach((enlace) => {
+                const activo = enlace.getAttribute('href') === `#${entrada.target.id}`;
+                enlace.toggleAttribute('data-activo', activo);
+              });
+            });
+          },
+          { rootMargin: '-45% 0px -50% 0px' },
+        );
+        secciones.forEach((s) => espia.observe(s));
+      }
+    </script>
   </body>
 </html>
