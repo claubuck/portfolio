@@ -84,7 +84,16 @@ export const stack = [
   },
   {
     categoria: 'Infraestructura',
-    items: ['Docker', 'Servidores Linux', 'Despliegues a producción', 'Git', 'Gestión de dominios'],
+    items: [
+      'Docker',
+      'Kubernetes',
+      'Argo CD',
+      'Grafana',
+      'Servidores Linux',
+      'Despliegues a producción',
+      'Git',
+      'Gestión de dominios',
+    ],
   },
 ];
 
